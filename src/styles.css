@@ -10,7 +10,7 @@
   --sea-ink: #173a40;
   --sea-ink-soft: #416166;
   --lagoon: #4fb8b2;
-  --lagoon-deep: #328f97;
+  --lagoon-deep: #f8f9f9;
   --palm: #2f6a4a;
   --sand: #e7f0e8;
   --foam: #f3faf5;
@@ -213,7 +213,7 @@ a {
 }
 
 a:hover {
-  color: #246f76;
+  color: #b3b5b5;
 }
 
 code {
