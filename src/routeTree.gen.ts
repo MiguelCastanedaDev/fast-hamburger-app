@@ -10,33 +10,81 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MenuIndexRouteImport } from './routes/menu/index'
+import { Route as ApiMenuIndexRouteImport } from './routes/api/menu/index'
+import { Route as ApiStripeIndexRouteImport } from './routes/api/stripe/index'
+import { Route as ApiStripePaymentLinkIndexRouteImport } from './routes/api/stripe/payment-link/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MenuIndexRoute = MenuIndexRouteImport.update({
+  id: '/menu/',
+  path: '/menu/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMenuIndexRoute = ApiMenuIndexRouteImport.update({
+  id: '/api/menu/',
+  path: '/api/menu/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStripeIndexRoute = ApiStripeIndexRouteImport.update({
+  id: '/api/stripe/',
+  path: '/api/stripe/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStripePaymentLinkIndexRoute =
+  ApiStripePaymentLinkIndexRouteImport.update({
+    id: '/api/stripe/payment-link/',
+    path: '/api/stripe/payment-link/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/menu/': typeof MenuIndexRoute
+  '/api/menu/': typeof ApiMenuIndexRoute
+  '/api/stripe/': typeof ApiStripeIndexRoute
+  '/api/stripe/payment-link/': typeof ApiStripePaymentLinkIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/menu': typeof MenuIndexRoute
+  '/api/menu': typeof ApiMenuIndexRoute
+  '/api/stripe': typeof ApiStripeIndexRoute
+  '/api/stripe/payment-link': typeof ApiStripePaymentLinkIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/menu/': typeof MenuIndexRoute
+  '/api/menu/': typeof ApiMenuIndexRoute
+  '/api/stripe/': typeof ApiStripeIndexRoute
+  '/api/stripe/payment-link/': typeof ApiStripePaymentLinkIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/menu/' | '/api/menu/' | '/api/stripe/' | '/api/stripe/payment-link/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/menu' | '/api/menu' | '/api/stripe' | '/api/stripe/payment-link'
+  id:
+    | '__root__'
+    | '/'
+    | '/menu/'
+    | '/api/menu/'
+    | '/api/stripe/'
+    | '/api/stripe/payment-link/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MenuIndexRoute: typeof MenuIndexRoute
+  ApiMenuIndexRoute: typeof ApiMenuIndexRoute
+  ApiStripeIndexRoute: typeof ApiStripeIndexRoute
+  ApiStripePaymentLinkIndexRoute: typeof ApiStripePaymentLinkIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,12 +96,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/menu/': {
+      id: '/menu/'
+      path: '/menu'
+      fullPath: '/menu/'
+      preLoaderRoute: typeof MenuIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/menu/': {
+      id: '/api/menu/'
+      path: '/api/menu'
+      fullPath: '/api/menu/'
+      preLoaderRoute: typeof ApiMenuIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/stripe/': {
+      id: '/api/stripe/'
+      path: '/api/stripe'
+      fullPath: '/api/stripe/'
+      preLoaderRoute: typeof ApiStripeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/stripe/payment-link/': {
+      id: '/api/stripe/payment-link/'
+      path: '/api/stripe/payment-link'
+      fullPath: '/api/stripe/payment-link/'
+      preLoaderRoute: typeof ApiStripePaymentLinkIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MenuIndexRoute: MenuIndexRoute,
+  ApiMenuIndexRoute: ApiMenuIndexRoute,
+  ApiStripeIndexRoute: ApiStripeIndexRoute,
+  ApiStripePaymentLinkIndexRoute: ApiStripePaymentLinkIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
